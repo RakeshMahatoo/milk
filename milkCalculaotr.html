@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Milk Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #000;
+      color: #fff;
+    }
+
+    .container {
+      background: linear-gradient(135deg, #43a1d3, #1976d2);
+      padding: 30px 20px;
+      max-width: 600px;
+      margin: 50px auto;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(67, 161, 211, 0.4);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 28px;
+      color: #fff;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 8px;
+      padding: 0 5px;
+    }
+
+    .entry {
+      margin: 10px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .entry input {
+      flex: 1 1 45%;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: #f9f9f9;
+      color: #000;
+    }
+
+    .button-group {
+      margin-top: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: #fff;
+      color: #1976d2;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background: #f0f0f0;
+      transform: scale(1.03);
+    }
+
+    .results {
+      margin-top: 25px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      color: #fff;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    @media (max-width: 500px) {
+      .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+      }
+
+      .entry input {
+        flex: 1 1 100%;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Milk Calculator</h1>
+
+    <div class="header-row">
+      <div>Pow</div>
+      <div>Days</div>
+    </div>
+
+    <div id="entries">
+      <div class="entry">
+        <input type="number" placeholder="Pow Taken" class="pow" />
+        <input type="number" placeholder="No. of Days" class="days" />
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button onclick="addEntry()">+ Add More</button>
+      <button onclick="calculate()">Calculate</button>
+      <button onclick="clearAll()">Clear</button>
+    </div>
+
+    <div class="results" id="results"></div>
+  </div>
+
+  <script>
+    const costPerPow = 13.75;
+    const mlPerPow = 250;
+
+    function addEntry() {
+      const div = document.createElement('div');
+      div.className = 'entry';
+      div.innerHTML = `
+        <input type="number" placeholder="Pow Taken" class="pow" />
+        <input type="number" placeholder="No. of Days" class="days" />
+      `;
+      document.getElementById('entries').appendChild(div);
+    }
+
+    function calculate() {
+      const powInputs = document.querySelectorAll('.pow');
+      const dayInputs = document.querySelectorAll('.days');
+
+      let totalPow = 0;
+
+      for (let i = 0; i < powInputs.length; i++) {
+        const pow = parseFloat(powInputs[i].value) || 0;
+        const days = parseFloat(dayInputs[i].value) || 0;
+        totalPow += pow * days;
+      }
+
+      const totalMl = totalPow * mlPerPow;
+      const litres = Math.floor(totalMl / 1000);
+      const ml = totalMl % 1000;
+      const totalCost = (totalPow * costPerPow).toFixed(2);
+
+      document.getElementById('results').innerHTML = `
+        Total Pow: ${totalPow} pow<br>
+        Total Milk: ${litres} litre(s) ${ml} ml<br>
+        Total Cost: ₹${totalCost}
+      `;
+    }
+
+    function clearAll() {
+      const entries = document.getElementById('entries');
+      entries.innerHTML = `
+        <div class="entry">
+          <input type="number" placeholder="Pow Taken" class="pow" />
+          <input type="number" placeholder="No. of Days" class="days" />
+        </div>
+      `;
+      document.getElementById('results').innerHTML = '';
+    }
+  </script>
+
+</body>
+</html>
